@@ -1,0 +1,38 @@
+import os
+import shutil
+
+# Path to your Documents folder
+source_dir = 'C:\\Users\\munik\\iCloudDrive\\iCloud~is~workflow~my~workflows'
+
+# Dictionary mapping file extensions to destination folders
+file_types = {
+    'Documents': ['.pdf', '.docx', '.txt'],
+    'Images': ['.jpg', '.jpeg', '.png', '.gif'],
+    'Music': ['.mp3', '.wav'],
+    'Videos': ['.mp4', '.mov'],
+    'Archives': ['.zip', '.tar', '.gz']
+}
+
+# Create destination folders if they don't exist
+for folder in file_types.keys():
+    folder_path = os.path.join(source_dir, folder)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+# Loop through files in the source directory
+for filename in os.listdir(source_dir):
+    # Skip directories
+    if os.path.isdir(os.path.join(source_dir, filename)):
+        continue
+    
+    # Get file extension
+    file_extension = os.path.splitext(filename)[1].lower()
+    
+    # Move or copy file to the appropriate folder
+    for folder, extensions in file_types.items():
+        if file_extension in extensions:
+            src_path = os.path.join(source_dir, filename)
+            dest_path = os.path.join(source_dir, folder, filename)
+            shutil.move(src_path, dest_path)  # Use shutil.copy(src_path, dest_path) to copy instead of move
+            print(f"Moved {filename} to {folder} folder.")  # Show the result of the move
+            break
